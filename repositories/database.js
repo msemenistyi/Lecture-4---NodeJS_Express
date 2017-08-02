@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var users = require('./users');
 var messages = require('./messages');
-var url = "mongodb://localhost:27017/mydb";
+var url = "mongodb://localhost:27017/philipp";
 
 MongoClient.connect(url, function(err, db) {
     if (err) throw err;
@@ -17,66 +17,61 @@ MongoClient.connect(url, function(err, db) {
 module.exports = {
 
     findAll: function(collection, callback) {
-        this.collection = collection;
+
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            let v = db.collection(this.collection).find({}, function(err, res) {
-                if (err) throw err;
-                callback( null, v );
+            db.collection(collection).find({}).toArray(function(err, res) {
+                callback(err, res);
                 db.close();
             });
         });
     },
 
     findOne: function(collection, id, callback) {
-        this.collection = collection;
-        this.id = id;
+        
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            db.collection(this.collection).findOne({
-                "id": this.id
+            db.collection(collection).findOne({
+                "id": id
             }, function(err, res) {
-                if (err) throw err;
+                callback(err, res);
                 db.close();
             });
         });
     },
 
     add: function(collection, obj, callback) {
-        this.collection = collection;
         this.obj = obj;
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            db.collection(this.collection).insertOne(obj, function(err, res) {
-                if (err) throw err;
+            db.collection(collection).insertOne(obj, function(err, res) {
+                callback(err, res);
                 db.close();
             });
         });
     },
 
     findOneAndDelete: function(collection, id, callback) {
-        this.collection = collection;
         this.id = id;
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            db.collection(this.collection).findOneAndDelete({
+            db.collection(collection).findOneAndDelete({
                 "id": this.id
             }, function(err, res) {
-                if (err) throw err;
+                callback(err, res);
                 db.close();
             });
         });
     },
 
     findOneAndUpdate: function(collection, id, callback) {
-        this.collection = collection;
         this.id = id;
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            db.collection(this.collection).findOneAndUpdate({
+            db.collection(collection).findOneAndUpdate({
                 "id": this.id
             }, function(err, res) {
-                if (err) throw err;
+                callback(err, res);
                 db.close();
             });
         });

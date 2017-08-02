@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const db = require('../../services/user');
+const db = require('../../repositories/database');
 
 router.get('/', (req, res, next) => {
-  db.findAll((err, data) => {
+  db.findAll('users', (err, data) => {
     if (!err){
       res.data = data;
       res.json(res.data);
@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  db.findOne( Number(req.params.id), (err, data) => {
+  db.findOne('users', Number(req.params.id), (err, data) => {
     if (!err){
       res.data = data;
       res.json(res.data);
@@ -28,14 +28,14 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const obj = req.body;
-  db.add( obj, (err, data) => {
+  db.add('users', obj, (err, data) => {
     res.end();
   });
 });
 
 
 router.delete('/:id', (req, res, next) => {
-  db.findOneAndDelete( Number(req.params.id), (err, data) => {
+  db.findOneAndDelete('users', Number(req.params.id), (err, data) => {
     if (!err){
       res.json(res.data);
     } else {
@@ -47,7 +47,7 @@ router.delete('/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   const obj = req.body;
-  db.findOneAndUpdate( Number(req.params.id), obj, (err, data) => {
+  db.findOneAndUpdate('users', Number(req.params.id), obj, (err, data) => {
     if (!err){
       res.json(res.data);
     } else {
